@@ -50,78 +50,50 @@
 
 
 <script>
-import axios from "axios";
-const todoUrl="http://localhost:3501/todod"
-export default { name:"App",
+
+import axios from 'axios';
+const todoURL = 'http://localhost:3501/todod';
+export default {
+  name: 'App',
   data() {
     return{
       todoList:[],
       todoItem:{},
-      editMode: false
-    };
+      editMode : false,
+    }
   },
-  methods: {
+  methods:{
     handleEdit(id) {
       this.editMode = true;
-      this.todoItem = this.todoList.find((item)=> item.id == id);
+      this.todoItem = this.todoList.find((item) => item.id == id);
     },
-    handleCancel(){
+    handleCancel() {
       this.editMode = false;
-      this.todoItem="";
+      this.todoItem = "";
     },
-    
-    async handleToDoItem() {
+    async handleToDoItem(){
       const id = this.todoItem.id;
+
       if (this.editMode){
-        //if im in the editmode so im gonna update 
-        await axios.put(`${todoUrl}/${id}`, this.todoItem);
+        await axios.put(`${todoURL}/${id}`, this.todoItem);
         this.editMode = false;
-        this.todoItem.content ="";
-      } else {
-        await axios.post(todoUrl, this.todoItem);
-        this.todoItem.content ="";
+        this.todoItem.content = "";
+      }else {
+        await axios.post(todoURL, this.todoItem);
+        this.todoItem.content = "";
       }
-      axios.get(todoUrl).then(
-        (Response) =>(this.todoList = Response.data));
-    }, 
-  async handleDelete(id) {
-      await axios.delete(`${todoUrl}/${id}`);
-      axios.get(todoUrl).then((response) => (this.todoList=response.data));
+      axios.get(todoURL).then(
+          (response) =>(this.todoList = response.data)
+      );
+    },
+    async handleDelete(id) {
+      await axios.delete(`${todoURL}/${id}`);
+      axios.get(todoURL).then((response) => (this.todoList=response.data));
 
     },
-    async created(){
-    axios.get(todoUrl).then((Response) => (this.todoList = Response.data ));
   },
-     },
- 
-  
-};
-</script>
-
-
-<!--
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  async created(){
+      axios.get(todoURL).then((response) => (this.todoList=response.data));
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
-
-
--->
